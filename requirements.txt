@@ -1,0 +1,7 @@
+pandas
+sqlalchemy
+psycopg2-binary
+jupyter
+dbt-postgres
+paramiko
+yagmail
