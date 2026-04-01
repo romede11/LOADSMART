@@ -1,107 +1,116 @@
-
 version: 2
 
-sources:
-  - name: loadsmart
+models:
+  - name: stg_freight_loads
     description: >
-      Data landed by another team, containing detailed load-level data across the full lifecycle
-      of a freight movement, from quote to delivery, including financials, carrier performance,
-      and tracking information.
-    database: challenge
-    schema: public
-    tables:
-      - name: raw_freight_loads
-        description: >
-          Source table containing detailed load-level data across the full lifecycle
-          of a freight movement, from quote to delivery, including financials,
-          carrier performance, and tracking information
-        columns:
-          - name: loadsmart_id
-            description: Unique identifier for the load in the source system (has duplicated records to be dealt with)
+      Staging model for freight loads data. Deduplicates records by loadsmart_id using
+      the most recent available timestamp across multiple date fields. Standardizes data types
+      and generates a surrogate hash key (check_col_key) to detect changes for incremental loading.
 
-          - name: lane
-            description: Raw origin-destination lane string
+    columns:
 
-          - name: quote_date
-            description: Raw timestamp when the load was quoted
+      - name: loadsmart_id
+        description: Unique identifier for each freight load.
+        tests:
+          - not_null
+          - unique
 
-          - name: book_date
-            description: Raw timestamp when the load was booked
+      - name: lane
+        description: Route of the freight load represented as "origin_city,state -> destination_city,state".
 
-          - name: source_date
-            description: Raw timestamp when the carrier was sourced
+      - name: quote_date
+        description: Timestamp when the load was quoted.
 
-          - name: pickup_date
-            description: Raw pickup date
+      - name: book_date
+        description: Timestamp when the load was booked.
 
-          - name: delivery_date
-            description: Raw delivery date
+      - name: source_date
+        description: Timestamp when the load was sourced (nullable).
 
-          - name: book_price
-            description: Raw price charged to the shipper
+      - name: pickup_date
+        description: Scheduled pickup timestamp.
 
-          - name: source_price
-            description: Raw cost paid to the carrier
+      - name: delivery_date
+        description: Scheduled delivery timestamp.
 
-          - name: pnl
-            description: Raw profit value as provided by the source
+      - name: book_price
+        description: Final booked price charged to the customer.
 
-          - name: mileage
-            description: Reported mileage for the load
+      - name: source_price
+        description: Cost paid to the carrier for the load.
 
-          - name: equipment_type
-            description: Equipment type as provided by source
+      - name: pnl
+        description: Profit and loss for the load, calculated as book_price minus source_price.
 
-          - name: carrier_rating
-            description: Carrier rating from source system
+      - name: mileage
+        description: Distance of the freight lane in miles.
 
-          - name: sourcing_channel
-            description: Channel used to source the carrier
+      - name: equipment_type
+        description: Type of equipment used (e.g., DRV = Dry Van, RFR = Reefer).
 
-          - name: vip_carrier
-            description: Flag indicating preferred carrier status
+      - name: carrier_rating
+        description: Numeric rating score of the carrier (scale to be confirmed).
 
-          - name: carrier_dropped_us_count
-            description: Number of historical drops by the carrier
+      - name: sourcing_channel
+        description: Channel through which the load was sourced (may be sparsely populated).
 
-          - name: carrier_name
-            description: Carrier name as provided by source
+      - name: vip_carrier
+        description: Boolean flag indicating whether the carrier is classified as VIP (business-defined).
 
-          - name: shipper_name
-            description: Shipper/customer name
+      - name: carrier_dropped_us_count
+        description: Number of times the carrier has dropped loads assigned by the company.
 
-          - name: carrier_on_time_to_pickup
-            description: Raw on-time pickup indicator
+      - name: carrier_name
+        description: Name of the carrier.
 
-          - name: carrier_on_time_to_delivery
-            description: Raw on-time delivery indicator
+      - name: shipper_name
+        description: Name of the shipper.
 
-          - name: carrier_on_time_overall
-            description: Raw overall on-time performance metric
+      - name: carrier_on_time_to_pickup
+        description: Boolean flag indicating whether the carrier arrived on time for pickup.
 
-          - name: pickup_appointment_time
-            description: Scheduled pickup appointment timestamp
+      - name: carrier_on_time_to_delivery
+        description: Boolean flag indicating whether the carrier delivered on time.
 
-          - name: delivery_appointment_time
-            description: Scheduled delivery appointment timestamp
+      - name: carrier_on_time_overall
+        description: Boolean flag indicating overall on-time performance for the load.
 
-          - name: has_mobile_app_tracking
-            description: Indicator for mobile app tracking availability
+      - name: pickup_appointment_time
+        description: Scheduled pickup appointment timestamp (cast from string format).
 
-          - name: has_macropoint_tracking
-            description: Indicator for Macropoint tracking availability
+      - name: delivery_appointment_time
+        description: Scheduled delivery appointment timestamp (cast from string format).
 
-          - name: has_edi_tracking
-            description: Indicator for EDI tracking availability
+      - name: has_mobile_app_tracking
+        description: Boolean flag indicating if mobile app tracking was enabled.
 
-          - name: contracted_load
-            description: Indicator if load is contracted
+      - name: has_macropoint_tracking
+        description: Boolean flag indicating if Macropoint tracking was enabled.
 
-          - name: load_booked_autonomously
-            description: Indicator if load was booked automatically
+      - name: has_edi_tracking
+        description: Boolean flag indicating if EDI tracking was enabled.
 
-          - name: load_sourced_autonomously
-            description: Indicator if load was sourced automatically
+      - name: contracted_load
+        description: Boolean flag indicating whether the load was part of a contracted agreement (vs spot market).
 
-          - name: load_was_cancelled
-            description: Indicator if load was cancelled
+      - name: load_booked_autonomously
+        description: Boolean flag indicating whether the load was booked automatically by the system.
+
+      - name: load_sourced_autonomously
+        description: Boolean flag indicating whether the load was sourced automatically by the system.
+
+      - name: load_was_cancelled
+        description: Boolean flag indicating whether the load was cancelled.
+
+      - name: check_col_key
+        description: Surrogate hash key generated from business columns to detect changes.
+        tests:
+          - not_null
+
+      - name: dbt_created_at
+        description: Date when the record was first created in the model.
+        tests:
+          - not_null
+
+      - name: dbt_updated_at
+        description: Date when the record was last updated due to detected changes.

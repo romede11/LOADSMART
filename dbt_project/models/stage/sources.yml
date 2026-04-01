@@ -1,0 +1,158 @@
+
+version: 2
+
+sources:
+  - name: loadsmart
+    description: >
+      Data landed by another team, containing detailed load-level data across the full lifecycle
+      of a freight movement, from quote to delivery, including financials, carrier performance,
+      and tracking information.
+    database: challenge
+    schema: public
+    tables:
+      - name: raw_freight_loads
+        config:
+          freshness:
+            warn_after: {count: 1, period: day}
+          loaded_at_field: source_date
+        description: >
+          Source table containing detailed load-level data across the full lifecycle
+          of a freight movement, from quote to delivery, including financials,
+          carrier performance, and tracking information
+        columns:
+          - name: loadsmart_id
+            description: Unique identifier for the load in the source system (has duplicated records to be dealt with)
+            tests:
+              - not_null
+              - unique
+
+          - name: lane
+            description: Raw origin-destination lane string
+            tests:
+              - not_null
+
+          - name: quote_date
+            description: Raw timestamp when the load was quoted
+
+          - name: book_date
+            description: Raw timestamp when the load was booked
+            tests:
+              - not_null
+
+          - name: source_date
+            description: Raw timestamp when the carrier was sourced
+
+          - name: pickup_date
+            description: Raw pickup date
+
+          - name: delivery_date
+            description: Raw delivery date
+
+          - name: book_price
+            description: Raw price charged to the shipper
+
+          - name: source_price
+            description: Raw cost paid to the carrier
+            tests:
+              - not_null
+
+          - name: pnl
+            description: Raw profit value as provided by the source
+            tests:
+              - not_null
+              - dbt_utils.expression_is_true:
+                  expression: " = book_price - source_price"
+
+          - name: mileage
+            description: Reported mileage for the load
+
+          - name: equipment_type
+            description: Equipment type as provided by source
+
+          - name: carrier_rating
+            description: Carrier rating from source system
+
+          - name: sourcing_channel
+            description: Channel used to source the carrier
+
+          - name: vip_carrier
+            description: Flag indicating preferred carrier status
+
+          - name: carrier_dropped_us_count
+            description: Number of historical drops by the carrier
+
+          - name: carrier_name
+            description: Carrier name as provided by source
+            tests:
+              - not_null:
+                  where: "load_was_cancelled is false"
+
+          - name: shipper_name
+            description: Shipper/customer name
+
+          - name: carrier_on_time_to_pickup
+            description: Raw on-time pickup indicator
+            tests:
+              - accepted_values:
+                  values: [true, false]
+
+          - name: carrier_on_time_to_delivery
+            description: Raw on-time delivery indicator
+            tests:
+              - accepted_values:
+                  values: [true, false]
+
+          - name: carrier_on_time_overall
+            description: Raw overall on-time performance metric
+            tests:
+              - accepted_values:
+                  values: [true, false]
+
+          - name: pickup_appointment_time
+            description: Scheduled pickup appointment timestamp
+
+          - name: delivery_appointment_time
+            description: Scheduled delivery appointment timestamp
+
+          - name: has_mobile_app_tracking
+            description: Indicator for mobile app tracking availability
+            tests:
+              - accepted_values:
+                  values: [true, false]
+
+          - name: has_macropoint_tracking
+            description: Indicator for Macropoint tracking availability
+            tests:
+              - accepted_values:
+                  values: [true, false]
+
+          - name: has_edi_tracking
+            description: Indicator for EDI tracking availability
+            tests:
+              - accepted_values:
+                  values: [true, false]
+
+          - name: contracted_load
+            description: Indicator if load is contracted
+            tests:
+              - accepted_values:
+                  values: [true, false]
+
+          - name: load_booked_autonomously
+            description: Indicator if load was booked automatically
+            tests:
+              - accepted_values:
+                  values: [true, false]
+
+          - name: load_sourced_autonomously
+            description: Indicator if load was sourced automatically
+            tests:
+              - accepted_values:
+                  values: [true, false]
+
+          - name: load_was_cancelled
+            description: Indicator if load was cancelled
+            tests:
+              - accepted_values:
+                  values: [true, false]
+  

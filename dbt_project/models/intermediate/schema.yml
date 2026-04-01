@@ -1,0 +1,113 @@
+version: 2
+
+models:
+  - name: int_loads_enriched
+    description: >
+      Intermediate model built on top of stg_freight_loads. Enhances the dataset by
+      parsing lane into structured geographic fields (city/state), and derives
+      delivery-related indicators such as delivery status and delivery month.
+
+    columns:
+
+      - name: loadsmart_id
+        description: Unique identifier for each freight load.
+        tests:
+          - not_null
+          - unique
+
+      - name: lane
+        description: Original lane string in the format "origin_city,state -> destination_city,state".
+
+      - name: pickup_part
+        description: Raw origin portion of the lane string before parsing (city,state).
+
+      - name: delivery_part
+        description: Raw destination portion of the lane string before parsing (city,state).
+
+      - name: pickup_city
+        description: Parsed pickup city extracted from lane.
+        tests:
+          - not_null
+
+      - name: pickup_state
+        description: Parsed pickup state extracted from lane.
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC']
+
+      - name: delivery_city
+        description: Parsed delivery city extracted from lane.
+        tests:
+          - not_null
+
+      - name: delivery_state
+        description: Parsed delivery state extracted from lane.
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC']
+
+      - name: is_delivered
+        description: Boolean flag indicating whether the load has been delivered (delivery_date is not null).
+        tests:
+          - not_null
+          - accepted_values:
+              values: [true, false]
+
+      - name: delivery_month
+        description: Month (truncated) of delivery_date, used for aggregations.
+
+      - name: delivery_date
+        description: Scheduled delivery timestamp inherited from staging model.
+
+      - name: pickup_date
+        description: Scheduled pickup timestamp inherited from staging model.
+
+      - name: book_date
+        description: Timestamp when the load was booked.
+
+      - name: quote_date
+        description: Timestamp when the load was quoted.
+
+      - name: source_date
+        description: Timestamp when the load was sourced.
+
+      - name: book_price
+        description: Final booked price charged to the customer.
+
+      - name: source_price
+        description: Cost paid to the carrier.
+
+      - name: pnl
+        description: Profit and loss for the load.
+
+      - name: mileage
+        description: Distance of the freight lane in miles.
+
+      - name: equipment_type
+        description: Type of equipment used (e.g., DRV, RFR).
+
+      - name: carrier_name
+        description: Name of the carrier.
+
+      - name: shipper_name
+        description: Name of the shipper.
+
+      - name: carrier_on_time_to_pickup
+        description: Boolean flag indicating on-time pickup performance.
+
+      - name: carrier_on_time_to_delivery
+        description: Boolean flag indicating on-time delivery performance.
+
+      - name: carrier_on_time_overall
+        description: Boolean flag indicating overall on-time performance.
+
+      - name: check_col_key
+        description: Surrogate hash key inherited from staging model.
+
+      - name: dbt_created_at
+        description: Record creation date in dbt.
+
+      - name: dbt_updated_at
+        description: Record update date in dbt.

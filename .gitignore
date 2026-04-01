@@ -1,6 +1,7 @@
 venv/
 __pycache__/
 *.pyc
-.env
+#.env purposefully not ignored to facilitate repeateability for the evaluater
 target/
 dbt_packages/
+notebooks/*.csv

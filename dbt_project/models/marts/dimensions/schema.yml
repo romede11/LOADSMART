@@ -1,0 +1,63 @@
+version: 2
+
+models:
+  - name: dim_carrier_tb
+    description: >
+      Dimension table containing unique carriers. Provides normalized carrier identifiers
+      and attributes used for analysis. Carrier name is standardized to uppercase to ensure consistency.
+
+    columns:
+
+      - name: carrier_id
+        description: Unique identifier for the carrier (derived from carrier_name).
+        tests:
+          - not_null
+          - unique
+
+      - name: carrier_name
+        description: Standardized carrier name in uppercase format.
+        tests:
+          - not_null
+
+      - name: vip_carrier
+        description: Boolean flag indicating whether the carrier is classified as VIP.
+        tests:
+          - accepted_values:
+              values: [true, false]
+
+  - name: dim_location_tb
+    description: >
+      Dimension table representing freight lanes (locations), with parsed and standardized
+      origin and destination attributes. Each record corresponds to a unique lane.
+
+    columns:
+
+      - name: location_id
+        description: Unique identifier for the lane, derived from the original lane string.
+        tests:
+          - not_null
+          - unique
+
+      - name: pickup_city
+        description: Standardized pickup city name (initcap format).
+        tests:
+          - not_null
+
+      - name: pickup_state
+        description: Standardized pickup state code (uppercase).
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC']
+
+      - name: delivery_city
+        description: Standardized delivery city name (initcap format).
+        tests:
+          - not_null
+
+      - name: delivery_state
+        description: Standardized delivery state code (uppercase).
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC']

@@ -5,3 +5,4 @@ select distinct
     initcap(delivery_city) as delivery_city,
     upper(delivery_state) as delivery_state
 from {{ ref('int_loads_enriched') }}
+where lane is not null

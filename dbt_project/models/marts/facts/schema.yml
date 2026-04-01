@@ -1,0 +1,90 @@
+version: 2
+
+models:
+  - name: fct_loads
+    description: >
+      Fact table containing freight load transactions. Each record represents a single load,
+      with associated financial metrics, operational attributes, and foreign keys to carrier
+      and location dimensions.
+
+    columns:
+
+      - name: loadsmart_id
+        description: Unique identifier for each freight load (fact grain).
+        tests:
+          - not_null
+          - unique
+
+      # 🔑 Foreign Keys
+      - name: location_id
+        description: Foreign key to dim_location_tb representing the freight lane.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_location_tb')
+              field: location_id
+
+      - name: carrier_id
+        description: Foreign key to dim_carrier_tb representing the carrier.
+        tests:
+          - relationships:
+              to: ref('dim_carrier_tb')
+              field: carrier_id
+
+      - name: shipper_id
+        description: Identifier for the shipper (standardized to uppercase).
+
+      # 📅 Dates
+      - name: quote_date
+        description: Timestamp when the load was quoted.
+
+      - name: book_date
+        description: Timestamp when the load was booked.
+
+      - name: pickup_date
+        description: Scheduled pickup timestamp.
+
+      - name: delivery_date
+        description: Scheduled delivery timestamp.
+
+      # 💰 Metrics
+      - name: carrier_rating
+        description: Rating of the carrier at the time of the load.
+
+      - name: book_price
+        description: Revenue from the customer for the load.
+
+      - name: source_price
+        description: Cost paid to the carrier for the load.
+
+      - name: pnl
+        description: Profit and loss for the load (book_price - source_price).
+  
+      - name: mileage
+        description: Distance of the freight lane in miles.
+
+      # 🚩 Flags
+      - name: is_delivered
+
+      - name: load_was_cancelled
+        description: Boolean flag indicating whether the load was cancelled.
+
+      - name: contracted_load
+        description: Boolean flag indicating whether the load was contracted.
+
+      # 📈 Performance
+      - name: carrier_on_time_to_pickup
+        description: Boolean flag indicating on-time pickup performance.
+
+      - name: carrier_on_time_to_delivery
+        description: Boolean flag indicating on-time delivery performance.
+
+      - name: carrier_on_time_overall
+        description: Boolean flag indicating overall on-time performance.
+
+      # 🚛 Operational
+      - name: equipment_type
+        description: Type of equipment used (e.g., DRV, RFR).
+
+      - name: sourcing_channel
+        description: Channel through which the load was sourced.

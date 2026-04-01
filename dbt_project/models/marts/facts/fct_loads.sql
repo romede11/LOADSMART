@@ -19,6 +19,7 @@ select
     book_date,
     pickup_date,
     delivery_date,
+    source_date,
 
     -- metrics
     carrier_rating,

@@ -1,6 +1,6 @@
 with base as (
 
-    select * from {{ ref('stg_loadsmart_tb') }}
+    select * from {{ ref('stg_freight_loads') }}
 
 ),
 

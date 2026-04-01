@@ -10,7 +10,13 @@ with source as (
         r.*,
         ROW_NUMBER() OVER (
             PARTITION BY loadsmart_id 
-            ORDER BY quote_date DESC
+            ORDER BY greatest(
+                cast(quote_date as timestamp),
+                cast(book_date as timestamp),
+                cast(source_date as timestamp),
+                cast(pickup_date as timestamp),
+                cast(delivery_date as timestamp)
+            ) desc nulls last
         ) AS rn
     from {{ source('loadsmart', 'raw_freight_loads') }} r
 
@@ -40,8 +46,8 @@ renamed as (
         carrier_on_time_to_pickup,
         carrier_on_time_to_delivery,
         carrier_on_time_overall,
-        pickup_appointment_time,
-        delivery_appointment_time,
+        cast(pickup_appointment_time as timestamp) as pickup_appointment_time,
+        cast(delivery_appointment_time as timestamp) as delivery_appointment_time,
         has_mobile_app_tracking,
         has_macropoint_tracking,
         has_edi_tracking,

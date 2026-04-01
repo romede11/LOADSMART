@@ -196,3 +196,18 @@ Runtime Error
 [0m18:00:22.028052 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000274571D2C70>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002745832B0D0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002745832B3A0>]}
 [0m18:00:22.029052 [debug] [MainThread]: Flushing usage events
 [0m18:00:22.690988 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m18:44:50.212454 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000017A8AED1A00>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000017A8C02E3D0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000017A8C02E1C0>]}
+
+
+============================== 18:44:50.216455 | 7338334b-4581-4c26-b549-4cdc3856bae3 ==============================
+[0m18:44:50.216455 [info ] [MainThread]: Running with dbt=1.10.20
+[0m18:44:50.218456 [debug] [MainThread]: running dbt with arguments {'debug': 'False', 'fail_fast': 'False', 'log_cache_events': 'False', 'send_anonymous_usage_stats': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'cache_selected_only': 'False', 'log_format': 'default', 'no_print': 'None', 'version_check': 'True', 'empty': 'False', 'printer_width': '80', 'quiet': 'False', 'log_path': 'logs', 'invocation_command': 'dbt build --exclude dbt_utils_source_expression_is_true_loadsmart_raw_freight_loads_pnl___book_price_source_price --exclude source_unique_loadsmart_raw_freight_loads_loadsmart_id --exclude source_not_null_loadsmart_raw_freight_loads_carrier_name --target prod', 'warn_error': 'None', 'write_json': 'True', 'introspect': 'True', 'target_path': 'None', 'partial_parse': 'True', 'static_parser': 'True', 'profiles_dir': 'C:\\Users\\Usuario\\.dbt', 'use_experimental_parser': 'False', 'use_colors': 'True', 'indirect_selection': 'eager'}
+[0m18:44:50.219455 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path C:\Users\Usuario\Desktop\loadsmart\dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m18:44:50.221454 [debug] [MainThread]: Command `dbt build` failed at 18:44:50.220455 after 0.12 seconds
+[0m18:44:50.221454 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000017A8AED1A00>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000017A8C02E1C0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000017A8C02E490>]}
+[0m18:44:50.222455 [debug] [MainThread]: Flushing usage events
+[0m18:44:51.424381 [debug] [MainThread]: An error was encountered while trying to flush usage events

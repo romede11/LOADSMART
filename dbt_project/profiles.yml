@@ -1,11 +1,30 @@
 dbt_project:
   target: dev
+
   outputs:
     dev:
       type: postgres
       host: localhost
-      user: postgres
-      password: postgres
+      user: "{{ env_var('DBT_USER') }}"
+      password: "{{ env_var('DBT_PASSWORD') }}"
       port: 5432
       dbname: challenge
       schema: public
+
+    uat:
+      type: postgres
+      host: localhost
+      user: "{{ env_var('DBT_USER') }}"
+      password: "{{ env_var('DBT_PASSWORD') }}"
+      port: 5432
+      dbname: challenge
+      schema: uat
+
+    prod:
+      type: postgres
+      host: localhost
+      user: "{{ env_var('DBT_USER') }}"
+      password: "{{ env_var('DBT_PASSWORD') }}"
+      port: 5432
+      dbname: challenge
+      schema: prod

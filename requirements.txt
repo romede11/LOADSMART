@@ -5,3 +5,5 @@ jupyter
 dbt-postgres
 paramiko
 yagmail
+dotenv
+ipykernel
