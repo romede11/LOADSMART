@@ -61,7 +61,8 @@ sources:
             tests:
               - not_null
               - dbt_utils.expression_is_true:
-                  expression: " = book_price - source_price"
+                  arguments:
+                    expression: " = book_price - source_price"
 
           - name: mileage
             description: Reported mileage for the load
@@ -85,7 +86,8 @@ sources:
             description: Carrier name as provided by source
             tests:
               - not_null:
-                  where: "load_was_cancelled is false"
+                  arguments:
+                    where: "load_was_cancelled is false"
 
           - name: shipper_name
             description: Shipper/customer name
@@ -94,19 +96,22 @@ sources:
             description: Raw on-time pickup indicator
             tests:
               - accepted_values:
-                  values: [true, false]
+                  arguments:
+                    values: [true, false]
 
           - name: carrier_on_time_to_delivery
             description: Raw on-time delivery indicator
             tests:
               - accepted_values:
-                  values: [true, false]
+                  arguments:
+                    values: [true, false]
 
           - name: carrier_on_time_overall
             description: Raw overall on-time performance metric
             tests:
               - accepted_values:
-                  values: [true, false]
+                  arguments:
+                    values: [true, false]
 
           - name: pickup_appointment_time
             description: Scheduled pickup appointment timestamp
@@ -118,41 +123,48 @@ sources:
             description: Indicator for mobile app tracking availability
             tests:
               - accepted_values:
-                  values: [true, false]
+                  arguments:
+                    values: [true, false]
 
           - name: has_macropoint_tracking
             description: Indicator for Macropoint tracking availability
             tests:
               - accepted_values:
-                  values: [true, false]
+                  arguments:
+                    values: [true, false]
 
           - name: has_edi_tracking
             description: Indicator for EDI tracking availability
             tests:
               - accepted_values:
-                  values: [true, false]
+                  arguments:
+                    values: [true, false]
 
           - name: contracted_load
             description: Indicator if load is contracted
             tests:
               - accepted_values:
-                  values: [true, false]
+                  arguments:
+                    values: [true, false]
 
           - name: load_booked_autonomously
             description: Indicator if load was booked automatically
             tests:
               - accepted_values:
-                  values: [true, false]
+                  arguments:
+                    values: [true, false]
 
           - name: load_sourced_autonomously
             description: Indicator if load was sourced automatically
             tests:
               - accepted_values:
-                  values: [true, false]
+                  arguments:
+                    values: [true, false]
 
           - name: load_was_cancelled
             description: Indicator if load was cancelled
             tests:
               - accepted_values:
-                  values: [true, false]
+                  arguments:
+                    values: [true, false]
   

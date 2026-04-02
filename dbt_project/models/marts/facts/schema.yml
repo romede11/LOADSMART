@@ -21,15 +21,17 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('dim_location_tb')
-              field: location_id
+              arguments:
+                to: ref('dim_location_tb')
+                field: location_id
 
       - name: carrier_id
         description: Foreign key to dim_carrier_tb representing the carrier.
         tests:
           - relationships:
-              to: ref('dim_carrier_tb')
-              field: carrier_id
+              arguments:
+                to: ref('dim_carrier_tb')
+                field: carrier_id
 
       - name: shipper_id
         description: Identifier for the shipper (standardized to uppercase).

@@ -10,3 +10,8 @@ services:
       POSTGRES_DB: challenge
     ports:
       - "5432:5432"
+  sftp:
+    image: atmoz/sftp
+    ports:
+      - "2222:22"
+    command: user:password:::upload
