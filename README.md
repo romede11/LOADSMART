@@ -17,17 +17,17 @@ This project demonstrates an end-to-end analytics workflow including:
 ```
 project/
 ├── data/                      # Raw CSV input
-├── models/
-│   ├── staging/              # stg models (incremental)
-│   ├── intermediate/         # int models (ephemeral)
-│   └── marts/                # fact & dimension tables
-├── macros/                   # custom macros (e.g. schema naming)
+├── dbt_project
+│    ├── models/
+│    │      ├── staging/              # stg models
+│    │      ├── intermediate/         # int models
+│    │      └── marts/                # fact & dimension tables
+│    ├── macros/                   # custom macros (e.g. schema naming)
+│    └── dbt_project.yml
 ├── notebooks/                # Jupyter notebook (Python tasks)
-├── output/                   # exported CSVs
 ├── .env                      # environment variables (not committed)
 ├── .env.example              # template for env vars
 ├── profiles.yml              # dbt connection config
-├── dbt_project.yml
 └── README.md
 ```
 
@@ -149,7 +149,7 @@ raw_freight_loads
 | ------------ | --------------------------- |
 | raw          | ingested CSV                |
 | staging      | incremental, cleaned data   |
-| intermediate | transformations (view)      |
+| intermediate | transformations             |
 | marts        | fact and dimension tables   |
 
 ---
